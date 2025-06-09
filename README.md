@@ -1,54 +1,36 @@
-# React + TypeScript + Vite
+# Task Management App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack Task Management application with authentication, authorization, role-based access control, and CRUD operations for users and tasks.
 
-Currently, two official plugins are available:
+## Technologies Used
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Backend:** NestJS (TypeScript), PostgreSQL, TypeORM, JWT authentication
+- **Frontend:** React, Redux Toolkit Query
+- **Database:** PostgreSQL
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- User authentication with JWT tokens
+- Role-based authorization with `admin` and `user` roles
+- CRUD operations for **Users** (admin only)
+- CRUD operations for **Tasks**
+  - **Users** can **view** tasks
+  - **Admins** can create, update, delete tasks and manage users
+- Password hashing with bcrypt
+- Secure REST API protected with JWT and Guards
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Architecture Overview
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **Backend (NestJS):**
+  - `AuthModule`: Handles user login and JWT token generation
+  - `UsersModule`: CRUD for users with role-based access
+  - `TasksModule`: CRUD for tasks with role-based restrictions
+  - Guards and decorators enforce roles and permissions
+  - PostgreSQL stores user and task data via TypeORM
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Frontend (React):**
+  - Uses Redux Toolkit Query to interact with backend API
+  - Stores JWT token in localStorage and sends it via Authorization header
+  - Separate views and buttons for users vs admins based on role
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+
